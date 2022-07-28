@@ -8,6 +8,10 @@ Featuring flash loans, price oracles, governance, NFTs, lending pools, smart con
 
 Visit [damnvulnerabledefi.xyz](https://damnvulnerabledefi.xyz)
 
+### Challenge Puppet
+
+
+
 ## Disclaimer
 
 All Solidity code, practices and patterns in this repository are DAMN VULNERABLE and for educational purposes only.
