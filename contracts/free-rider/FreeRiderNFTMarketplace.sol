@@ -142,6 +142,7 @@ contract FreeRiderAttack {
         console.log("WETH bal: ",IWETH9(weth).balanceOf(address(this)));
 
         //Transfer NFT to buyer
+        token.setApprovalForAll(buyer, true);
         for(uint i = 0; i<6; i++){
             token.safeTransferFrom(address(this), buyer, i);
         }
